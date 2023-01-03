@@ -36,16 +36,20 @@ const Hero = ({
   const [start, setStart] = useState("Chicago") 
   const [end, setEnd] = useState("Topgolf, Schaumburg")
   const [transit, setTransit] = useState("walking")
-  const [time, setTime] = useState('None')
+  const [depart, setDepart] = useState('None')
+  const [arrival, setArrival] = useState('None')
   // gets data from textbox fields and stores it into proper states
   const calDist = () => {
     console.log(transit)
-    console.log(time)
+    console.log(depart)
     // set to default in case if no time
-    if (time == '') {
-      setTime('None')
+    if (depart == '') {
+      setDepart('None')
     }
-    fetch('/create_route/' + start + '/' + end + '/' + transit + '/' + time)
+    if (arrival == '') {
+      setDepart('None')
+    }
+    fetch('/create_route/' + start + '/' + end + '/' + transit + '/' + depart + '/' + arrival)
        .then((res) => res.json())
        .then((data) => {
           console.log(data);
@@ -80,8 +84,11 @@ const Hero = ({
   const handleEnd = event => {
     setEnd(event.target.value)
   }
-  const handleTime = event => {
-    setTime(event.target.value)
+  const handleDepart = event => {
+    setDepart(event.target.value)
+  }
+  const handleArrival = event => {
+    setArrival(event.target.value)
   }
   const handleSelect = event => {
     setTransit(event.target.value)
@@ -98,10 +105,15 @@ const Hero = ({
               <span className="text-color-primary">GeoSpeed</span>
             </h1>
             <div className="cta-action">
+              Start Point
               <Input id="start_loc" type="text" label="Subscribe" labelHidden hasIcon="right" placeholder="Start Location" value={start} onChange={handleStart} >
               </Input>
+              Destination
               <Input id="end_loc" type="text" label="Subscribe" labelHidden hasIcon="right" placeholder="End Location" value={end} onChange={handleEnd}/>
-              <Input id="time" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Arrival Time (future)" value={time} onChange={handleTime}/>
+              Departure time (In Future)
+              <Input id="depart" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Departure Time (future)" value={depart} onChange={handleDepart}/>
+              Arrival time (In Future)
+              <Input id="arrival" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Arrival Time (future)" value={arrival} onChange={handleArrival}/>
               <select onChange={handleSelect}>
                 <option value="walking"> Select mode of transportation </option>
                 <option value="walking"> Walking </option>

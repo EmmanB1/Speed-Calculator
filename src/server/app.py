@@ -1,6 +1,6 @@
 from flask import Flask
 from directions import getDirection
-from datetime import datetime
+from datetime import datetime, date
 from pprint import pprint
 from dateutil import parser
 
@@ -17,8 +17,9 @@ def hello():
     # Cycling (Bike) - similar to walking: Calculate how fast the person needs to be to get there
     # Driving (Car) - similar to Cycling: Calculate the **average** speed required to get there by given time
 @app.route("/create_route/<start>/<end>/<transport>")
-@app.route("/create_route/<start>/<end>/<transport>/<departure>")
-def navigation(start, end, transport="walking", departure='None', unit="imperial"):
+@app.route("/create_route/<start>/<end>/<transport>/<departure>/")
+@app.route("/create_route/<start>/<end>/<transport>/<departure>/<arrival>")
+def navigation(start, end, transport="walking", departure='None', arrival='None' unit="imperial"):
     # if user input is added
     if departure == 'None':
         departure = datetime.now()
@@ -39,6 +40,10 @@ def navigation(start, end, transport="walking", departure='None', unit="imperial
     set_dict = dict({})
     set_dict['distance'] = data[0]['legs'][0]['duration']['text']
     set_dict['duration'] = data[0]['legs'][0]['distance']['text']
+    # calculate how fast one needs to be
+    if arrival != 'None' and departure != 'None':
+        info = datetime.combine(date.today(), departure) - datetime.combine(date.today(), arrival)
+        print(info)
     return set_dict
 @app.route("/get_direction_test")
 def navigation_test():
@@ -53,8 +58,10 @@ def navigation_test():
     # AND tell the time the individual will get there 
     # Cycling (Bike) - similar to walking: Calculate how fast the person needs to be to get there at that moment
     # Driving (Car) - similar to Cycling: Calculate the **average** speed required to get there at that moment
-    
+
 # calculate recommended speed
+def getTime():
+
 def calVelocity(dist, time):
     return dist * time
 
