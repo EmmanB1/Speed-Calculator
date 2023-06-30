@@ -56,7 +56,7 @@ const Hero = ({
           setInfo(data);
        })
        .catch((err) => {
-        setInfo({distance: "Error, please correct any errors"});
+        setInfo({speed: "Error, could not calculate speed"});
       });
   }
   const closeModal = (e) => {
@@ -110,9 +110,9 @@ const Hero = ({
               </Input>
               Destination
               <Input id="end_loc" type="text" label="Subscribe" labelHidden hasIcon="right" placeholder="End Location" value={end} onChange={handleEnd}/>
-              Departure time (In Future)
+              Departure time
               <Input id="depart" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Departure Time (future)" value={depart} onChange={handleDepart}/>
-              Arrival time (In Future)
+              Arrival time
               <Input id="arrival" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Arrival Time (future)" value={arrival} onChange={handleArrival}/>
               <select onChange={handleSelect}>
                 <option value="walking"> Select mode of transportation </option>
@@ -130,7 +130,7 @@ const Hero = ({
               </p>
               <div className="reveal-from-bottom" data-reveal-delay="600">
               <h1 className="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">
-                {info['distance']}
+                {info['speed']}
               </h1>
                 {/* <ButtonGroup>
                   <Button tag="a" color="primary" wideMobile href="https://cruip.com/">
