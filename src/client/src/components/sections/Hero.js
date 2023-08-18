@@ -33,31 +33,40 @@ const Hero = ({
     e.preventDefault();
     setVideomodalactive(true);
   }
-  const [start, setStart] = useState("Chicago") 
-  const [end, setEnd] = useState("Topgolf, Schaumburg")
+  const [start, setStart] = useState("") 
+  const [end, setEnd] = useState("")
   const [transit, setTransit] = useState("walking")
   const [depart, setDepart] = useState('None')
   const [arrival, setArrival] = useState('None')
   // gets data from textbox fields and stores it into proper states
-  const calDist = () => {
+  async function calDist() {
     console.log(transit)
     console.log(depart)
     // set to default in case if no time
+    // use await to make sure that all of the operations occur accordingly
     if (depart == '') {
-      setDepart('None')
+      await setDepart('None')
     }
     if (arrival == '') {
-      setDepart('None')
+      await setArrival('None')
     }
-    fetch('/create_route/' + start + '/' + end + '/' + transit + '/' + depart + '/' + arrival)
+    if (start == '') {
+      await setStart('None')
+    }
+    if (end == '') {
+      await setEnd('None')
+    }
+    await fetch('/create_route/' + start + '/' + end + '/' + transit + '/' + depart + '/' + arrival)
        .then((res) => res.json())
        .then((data) => {
           console.log(data);
           setInfo(data);
        })
        .catch((err) => {
-        setInfo({speed: "Error, could not calculate speed"});
+        setInfo({speed: "Error",
+                message: "Could not calculate speed"});
       });
+    
   }
   const closeModal = (e) => {
     e.preventDefault();
@@ -105,21 +114,21 @@ const Hero = ({
               <span className="text-color-primary">GeoSpeed</span>
             </h1>
             <div className="cta-action">
-              Start Point
+              Start Point (Required)
               <Input id="start_loc" type="text" label="Subscribe" labelHidden hasIcon="right" placeholder="Start Location" value={start} onChange={handleStart} >
               </Input>
-              Destination
+              Destination (Required)
               <Input id="end_loc" type="text" label="Subscribe" labelHidden hasIcon="right" placeholder="End Location" value={end} onChange={handleEnd}/>
               Departure time
-              <Input id="depart" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Departure Time (future)" value={depart} onChange={handleDepart}/>
-              Arrival time
-              <Input id="arrival" type="time" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Arrival Time (future)" value={arrival} onChange={handleArrival}/>
+              <Input id="depart" type="datetime-local" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Departure Time (future)" value={depart} onChange={handleDepart}/>
+              Arrival time (Required)
+              <Input id="arrival" type="datetime-local" step="2" label="Subscribe" labelHidden hasIcon="right" placeholder="Arrival Time (future)" value={arrival} onChange={handleArrival}/>
               <select onChange={handleSelect}>
                 <option value="walking"> Select mode of transportation </option>
                 <option value="walking"> Walking </option>
-                <option value="driving"> Car </option>
+               {/*  <option value="driving"> Car </option>
                 <option value="transit"> Bus </option>
-                <option value="cycling"> Bike </option>
+                <option value="cycling"> Bike </option> */}
               </select>
               <Toggle labelLeft="Future Date"/>
               <Button color="primary" onClick={() => calDist()}>Compute Distance</Button>
@@ -130,7 +139,9 @@ const Hero = ({
               </p>
               <div className="reveal-from-bottom" data-reveal-delay="600">
               <h1 className="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">
-                {info['speed']}
+                Speed: {info['speed']}
+                <br/>
+                Message: {info['message']}
               </h1>
                 {/* <ButtonGroup>
                   <Button tag="a" color="primary" wideMobile href="https://cruip.com/">
@@ -158,12 +169,12 @@ const Hero = ({
                 height={504} />
             </a>
           </div>
-          <Modal
+          {/*<Modal
             id="video-modal"
             show={videoModalActive}
             handleClose={closeModal}
             video="https://player.vimeo.com/video/174002812"
-            videoTag="iframe" />
+              videoTag="iframe" />*/}
         </div>
       </div>
     </section>
