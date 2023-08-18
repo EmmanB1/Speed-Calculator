@@ -81,38 +81,39 @@ def navigation(start='None', end='None', transport="walking", departure='None', 
 
         set_dict['message'] = walkResp(velo)
         
-
-    else: # this is for walking, car, and cycling with no preferred future time
-        # use regex to to get the convert str time to float seconds
-        # get hour
-        dist_mi = 0
-        time_sec = 0
-        # \d+h* gets all digits before string
-        # get float distance (in mi)
-        # \d+h* in regex gets all digits before string
-        dist_mi = str_to_dist(re.findall(r'\d+h*', set_dict['distance']))
+    # this is for walking, car, and cycling with no preferred future time
+    # **UPDATE Removing this feature for simplicity**
+    # else: 
+    #     # use regex to to get the convert str time to float seconds
+    #     # get hour
+    #     dist_mi = 0
+    #     time_sec = 0
+    #     # \d+h* gets all digits before string
+    #     # get float distance (in mi)
+    #     # \d+h* in regex gets all digits before string
+    #     dist_mi = str_to_dist(re.findall(r'\d+h*', set_dict['distance']))
         
-        # get float time (in seconds)
-        # \d+h* gets all digits before string
-        # properly format (what if there is no secs? )
-        time_str = set_dict['duration']
-        if time_str.find('h') != -1:
-            if time_str.find('s') != -1:
-                time_str += ' 0 s'
-                #if time_str.find('m') == -1:
-                    # some how insert into the middle of string for formatting
-            if time_str.find('m') == -1:
-                time_str += ' 0 m'
-            if time_str.find('s') == -1:
-                time_str += ' 0 s'
-        print(time_str)
-        time_sec = sec_to_hr(str_to_time(re.findall(r'\d+h*', time_str)))
-        print(dist_mi)
-        print(time_sec)
-        velo = str(calVelocity(dist_mi, time_sec)) 
-        set_dict['speed'] = velo + ' mph'
+    #     # get float time (in seconds)
+    #     # \d+h* gets all digits before string
+    #     # properly format (what if there is no secs? )
+    #     time_str = set_dict['duration']
+    #     if time_str.find('h') != -1:
+    #         if time_str.find('s') != -1:
+    #             time_str += ' 0 s'
+    #             #if time_str.find('m') == -1:
+    #                 # some how insert into the middle of string for formatting
+    #         if time_str.find('m') == -1:
+    #             time_str += ' 0 m'
+    #         if time_str.find('s') == -1:
+    #             time_str += ' 0 s'
+    #     print(time_str)
+    #     time_sec = sec_to_hr(str_to_time(re.findall(r'\d+h*', time_str)))
+    #     print(dist_mi)
+    #     print(time_sec)
+    #     velo = str(calVelocity(dist_mi, time_sec)) 
+    #     set_dict['speed'] = velo + ' mph'
 
-        set_dict['message'] = walkResp(velo)
+    #     set_dict['message'] = walkResp(velo)
     # need to create a transit 
     print(set_dict['message'])
     return set_dict
